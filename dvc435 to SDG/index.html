@@ -248,10 +248,7 @@ input{
 		var whichOne = 0;
 
 
-
-
-
-		checkType();
+		//checkType();
 
 
 		colours = ['#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854',"#666"];
@@ -259,11 +256,11 @@ input{
 		function drawChoose() {
 			d3.select("#occselect").remove();
 			d3.select("#sel").remove();
-
+      console.log(whichOne);
 			if(whichOne == 0){
-				drawGraphic(graphic_data2);
-			} else {
 				drawGraphic(graphic_data);
+			} else {
+			drawGraphic(graphic_data2);
 			}
 
 
@@ -291,8 +288,10 @@ input{
 
 		    // clear out existing graphics
 		    graphic.empty();
-			keypoints.empty();
-			footer.empty();
+			  keypoints.empty();
+			  footer.empty();
+        d3.select(".tabs").select("ul").selectAll("*").remove();
+
 
       //change the text in the tabs to what's in the config
       if(dvc.essential.tab_names.length>0){
@@ -656,7 +655,8 @@ input{
 			//Check if there are any preselects
 			checkUrl();
 
-
+      //check the tab buttons
+      checkType();
 			//use pym to calculate chart dimensions
 		    if (pymChild) {
 		        pymChild.sendHeight();

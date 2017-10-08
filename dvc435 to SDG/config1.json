@@ -2,7 +2,7 @@
     "essential" : {
             "graphic_data_url": "under5.csv",
             "graphic_data_url2": "neonatal.csv",
-            "tab_names":["Under 5 mortality","Neonatal mortality"],
+            "tab_names":["Under 5 mortality","Neonatal mortality","duck duck duck"],
             "dateFormat":"%Y",
 
             "legendLabels" : [],
