@@ -1132,7 +1132,7 @@ input{
 				d3.select(".tabs").selectAll("li").attr("class","");
 				d3.select(this).attr("class","tab-current");
 				whichOne = d3.select(this).attr("id").slice(-1);
-				removeHash();
+				if(dvc.essential.keepurl=="true"){}else{removeHash();}
 				listnames = [];
 				drawChoose();
 				
@@ -1188,7 +1188,8 @@ input{
 	function removeHash() { 
 		history.pushState("", document.title, window.location.pathname + window.location.search);
 	}
-	
+	var dataarray={};
+	var data={};
 
 		//check whether browser can cope with svg	
 		if (Modernizr.svg) {
@@ -1196,6 +1197,26 @@ input{
 			d3.json("config1.json", function(error, config) {
 			dvc=config
 
+			
+			
+			if(dvc.essential.graphic_data_array.length > 0){
+				dvc.essential.graphic_data_array.forEach(function(i)
+					{
+						
+						j=0;
+						console.log(i)
+						d3.csv(i,function(error,data){
+						//console.log(data[j])
+						console.log("read the csv")
+						console.log("j="+j)
+						dataarray[j]=data[j];
+						console.log(dataarray[j])
+						j++
+						})
+					}
+
+			)}
+			
 				//load chart data
 				d3.csv(dvc.essential.graphic_data_url, function(error, data) {
 					graphic_data = data;
