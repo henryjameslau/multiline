@@ -247,6 +247,8 @@ input{
 		var pymChild = null;
 		var listnames = [];
 		var whichOne = 0;
+    var dataarray={};
+    var data={};
 
 		checkType();
 
@@ -257,12 +259,13 @@ input{
 			d3.select("#occselect").remove();
 			d3.select("#sel").remove();
 
-			if(whichOne == 0){
-				drawGraphic(graphic_data2);
-			} else {
-				drawGraphic(graphic_data);
-			}
-//      drawGraphic(dataarray[whichOne])
+			// if(whichOne == 0){
+			// 	drawGraphic(graphic_data2);
+			// } else {
+			// 	drawGraphic(graphic_data);
+			// }
+    console.log("whichOne="+whichOne)
+     drawGraphic(dataarray[whichOne])
 
 
 		}
@@ -345,22 +348,38 @@ input{
 
 		    // parse data into columns
 		    lines = {};
-            babynames = [];
-			indexno = [];
-			j=0;
+        babynames = [];
+			  indexno = [];
+			  j=0;
 
 			var myDeselect;
 
-		    for (var column in graphic_data[0]) {
+        for (var column in graphic_data[0]){
 
+		        if (column == 'date') continue;
+
+                 babynames.push(column);
+				         indexno.push("index" +j);
+
+            lines["index"+j] = graphic_data.map(function(d) {
+
+		            return {
+		                'date': d.date,
+		                'amt': d[column]
+		            };
+		        });
+				j++;
+		    }
+
+        for (var column in dataarray[1][0]){
 
 		        if (column == 'date') continue;
 
                  babynames.push(column);
 				 indexno.push("index" +j);
 
-		        lines["index"+j] = graphic_data.map(function(d) {
-
+		        //lines["index"+j] = graphic_data.map(function(d) {
+            lines["index"+j] = dataarray[1].map(function(d) {
 
 		            return {
 		                'date': d.date,
@@ -1178,75 +1197,67 @@ input{
 			$("#occselect").trigger("chosen:updated");
 			$("#occselect").setSelectionOrder(listnames);
 		}
-
-
-
-
-
 	}
 
 
 	function removeHash() {
 		history.pushState("", document.title, window.location.pathname + window.location.search);
 	}
-	var dataarray={};
-	var data={};
+
 
 		//check whether browser can cope with svg
 		if (Modernizr.svg) {
 		   //load config
 			d3.json("config1.json", function(error, config) {
 			dvc=config
-
-
-
+      console.log("loading config")
 			if(dvc.essential.graphic_data_array.length > 0){
 				dvc.essential.graphic_data_array.forEach(function(i)
 					{
-
 						j=0;
 						console.log("each csv:"+i)
 						d3.csv(i,function(error,data){
 						//console.log(data[j])
 						console.log("read the csv")
 						console.log("j="+j)
-						dataarray[j]=data[j]
-            console.log(dataarray[j])
-            // dataarray[j].forEach(function(d) {
-  					// 	d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
-  					// });
-						//console.log(dataarray[j])
+						dataarray[j]=data
+            dataarray[j].forEach(function(d) {
+  					 	d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
+  					 });
+						console.log(dataarray[j])
 						j++
 						})
 					}
 
 			)}
 
-				//load chart data
-				d3.csv(dvc.essential.graphic_data_url, function(error, data) {
-					graphic_data = data;
-
-					graphic_data.forEach(function(d) {
-						d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
-					});
-
-					d3.csv(dvc.essential.graphic_data_url2, function(error, data2) {
-						graphic_data2 = data2;
-
-						graphic_data2.forEach(function(d) {
-							d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
-						});
-
-						//use pym to create iframed chart dependent on specified variables
-						pymChild = new pym.Child({ renderCallback: drawChoose});
-
-					});
-				});
-			})
+				// //load chart data
+				// d3.csv(dvc.essential.graphic_data_url, function(error, data) {
+				// 	graphic_data = data;
+        //
+				// 	graphic_data.forEach(function(d) {
+				// 		d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
+				// 	});
+        //
+				// 	d3.csv(dvc.essential.graphic_data_url2, function(error, data2) {
+				// 		graphic_data2 = data2;
+        //
+				// 		graphic_data2.forEach(function(d) {
+				// 			d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
+				// 		});
+        //
+				// 		//use pym to create iframed chart dependent on specified variables
+				// 		pymChild = new pym.Child({ renderCallback: drawChoose});
+        //
+				// 	});
+        pymChild = new pym.Child({ renderCallback: drawChoose});
+				})//;
+			//}//)
 
 		} else {
+      console.log("fallback")
 			 //use pym to create iframe containing fallback image (which is set as default)
-			 pymChild = new pym.Child();
+			  pymChild = new pym.Child();
 			if (pymChild) {
 		        pymChild.sendHeight();
 		    }
