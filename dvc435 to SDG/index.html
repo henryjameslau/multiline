@@ -246,30 +246,26 @@ input{
 		var pymChild = null;
 		var listnames = [];
 		var whichOne = 0;
+    var dataarray={};
+    var data={};
+    var colours=[];
+		checkType();
 
 
-		//checkType();
 
-
-		colours = ['#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854',"#666"];
 
 		function drawChoose() {
 			d3.select("#occselect").remove();
 			d3.select("#sel").remove();
-      console.log(whichOne);
-			if(whichOne == 0){
-				drawGraphic(graphic_data);
-			} else {
-			drawGraphic(graphic_data2);
-			}
 
-
+     drawGraphic(dataarray[whichOne])
 		}
 
 
 		function drawGraphic(graphic_data) {
 		   var threshold_md = 788;
 		   var threshold_sm = dvc.optional.mobileBreakpoint;
+       colours=dvc.essential.lineColours;
 
 		  	//set variables for chart dimensions dependent on width of #graphic
 		    if (graphic.width() < threshold_sm) {
@@ -327,17 +323,16 @@ input{
 
 	        //specify number of ticks on x axis and whether 1st and last data point labels are included
 	        if(graphic.width()<threshold_sm){
-	            xAxis.tickValues(x.ticks(dvc.optional.x_num_ticks_sm_md_lg[0]).concat( x.domain() ));
+	              xAxis.tickValues(x.ticks(dvc.optional.x_num_ticks_sm_md_lg[0]).concat( x.domain() ));
 	        } else if (graphic.width() <= threshold_md){
-				xAxis.tickValues(x.ticks(dvc.optional.x_num_ticks_sm_md_lg[1])/*.concat( x.domain() )*/);
-			} else {
-	            xAxis.tickValues(x.ticks(dvc.optional.x_num_ticks_sm_md_lg[2])/*.concat( x.domain() )*/);
+				        xAxis.tickValues(x.ticks(dvc.optional.x_num_ticks_sm_md_lg[1])/*.concat( x.domain() )*/);
+			    } else {
+	              xAxis.tickValues(x.ticks(dvc.optional.x_num_ticks_sm_md_lg[2])/*.concat( x.domain() )*/);
 	        }
 
 		    var yAxis = d3.svg.axis()
 		        .scale(y)
 		        .orient('left');
-
 
 
 		    //gridlines
@@ -351,22 +346,20 @@ input{
 
 		    // parse data into columns
 		    lines = {};
-            babynames = [];
-			indexno = [];
-			j=0;
+        babynames = [];
+			  indexno = [];
+			  j=0;
 
 			var myDeselect;
 
-		    for (var column in graphic_data[0]) {
-
+        for (var column in graphic_data[0]){
 
 		        if (column == 'date') continue;
 
                  babynames.push(column);
-				 indexno.push("index" +j);
+				         indexno.push("index" +j);
 
-		        lines["index"+j] = graphic_data.map(function(d) {
-
+            lines["index"+j] = graphic_data.map(function(d) {
 
 		            return {
 		                'date': d.date,
@@ -561,7 +554,7 @@ input{
 			            })
 						.style("pointer-events","none")
 						.on("mouseout",null)
-                        .on("mouseover",null);
+            .on("mouseover",null);
 
 
 
@@ -643,7 +636,6 @@ input{
 							});
 						});
 
-
 			//create link to source
 			d3.select(".footer").append("p")
 				.text("Source: ")
@@ -668,10 +660,7 @@ input{
 
     function selectlist() {
 
-			//var areacodes =  datacsv.map(function(d) { return d.AREACD; });
-			//var areanames =  datacsv.map(function(d) { return d.AREANM; });
 			var menunames = d3.zip(babynames,indexno).sort(function(a, b){ return d3.ascending(a[0], b[0]); });
-
 
 			// Build option menu for occupations
 			var optns = d3.select("#chosensel").append("div").attr("id","sel").append("select")
@@ -686,21 +675,19 @@ input{
 				.text("");
 
 			optns.selectAll("p").data(menunames).enter().append("option")
-				.attr("value", function(d){ return d[1]}) //editthis
+				.attr("value", function(d){ return d[1]})
 				.text(function(d){ return d[0]});
 
 			myId=null;
-
-
 			removenames = [];
 			oldlistnames = [];
 
-			$('#occselect').chosen({width: "98%", max_selected_options: 6/*, allow_single_deselect:true*/}).on('change',function(evt,params){
+      // if you want to change the max number of choices this is where you do it with max_selected_options
+			$('#occselect').chosen({width: "98%", max_selected_options: 6}).on('change',function(evt,params){
 
 								if(typeof params != 'undefined') {
 
-										/* identify the data-nm attribute of the polygon you've hovered over */
-										//indexarea = document.getElementById("occselect").selectedIndex;
+
 										myId=params.selected;
 
 										myDeselect=params.deselected;
@@ -716,16 +703,6 @@ input{
 											listnames.pop();
 											//delete listnames[index];
 										}
-
-
-
-										//currclass=params.selected;
-
-                                        //d3.selectAll(".hoverline")
-//                                            .on("mouseover",null)
-//											.on("mouseout",null);
-
-
 
 										listnames.forEach(function(d,i){
 											if(myDeselect === undefined){
@@ -755,11 +732,9 @@ input{
 
 	};
 
-
-
     function stripspaces(str){
-	str=str.replace(/\s+/g, '');
-	return str;
+    	str=str.replace(/\s+/g, '');
+    	return str;
 	}
 
     function hoverLine(myId,no,method){
@@ -1065,7 +1040,7 @@ input{
 				d3.select(".tabs").selectAll("li").attr("class","");
 				d3.select(this).attr("class","tab-current");
 				whichOne = d3.select(this).attr("id").slice(-1);
-				removeHash();
+				if(dvc.essential.keepurl==true){}else{removeHash();}
 				listnames = [];
 				drawChoose();
 
@@ -1089,7 +1064,6 @@ input{
 			listnamesAll = 	listnamesLocal;
 		} else if(listnamesParent != undefined) {
 			listnamesAll = 	listnamesParent;
-			console.log(listnamesAll);
 		} else {var listnamesAll}
 
 
@@ -1110,11 +1084,6 @@ input{
 			$("#occselect").trigger("chosen:updated");
 			$("#occselect").setSelectionOrder(listnames);
 		}
-
-
-
-
-
 	}
 
 
@@ -1128,35 +1097,28 @@ input{
 		   //load config
 			d3.json("config1.json", function(error, config) {
 			dvc=config
+			if(dvc.essential.graphic_data_array.length > 0){
+				dvc.essential.graphic_data_array.forEach(function(i)
+					{
+						j=0;
+						d3.csv(i,function(error,data){
+						dataarray[j]=data
+            dataarray[j].forEach(function(d) {
+  					 	d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
+  					 });
+						j++
+            if(j==dvc.essential.graphic_data_array.length){pymChild = new pym.Child({ renderCallback: drawChoose});}
+						})
+					})
+			}
+    })
 
-				//load chart data
-				d3.csv(dvc.essential.graphic_data_url, function(error, data) {
-					graphic_data = data;
-
-					graphic_data.forEach(function(d) {
-						d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
-					});
-
-					d3.csv(dvc.essential.graphic_data_url2, function(error, data2) {
-						graphic_data2 = data2;
-
-						graphic_data2.forEach(function(d) {
-							d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
-						});
-
-						//use pym to create iframed chart dependent on specified variables
-						pymChild = new pym.Child({ renderCallback: drawChoose});
-
-					});
-				});
-			})
 
 		} else {
+      console.log("fallback")
 			 //use pym to create iframe containing fallback image (which is set as default)
-			 pymChild = new pym.Child();
-			if (pymChild) {
-		        pymChild.sendHeight();
-		    }
+			pymChild = new pym.Child();
+			if (pymChild) {pymChild.sendHeight();}
 		}
 
 		var _gaq = _gaq || [];
