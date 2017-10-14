@@ -260,8 +260,6 @@ input{
 			d3.select("#sel").remove();
 
      drawGraphic(dataarray[whichOne])
-
-
 		}
 
 
@@ -1104,8 +1102,8 @@ input{
             dataarray[j].forEach(function(d) {
   					 	d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
   					 });
-             pymChild = new pym.Child({ renderCallback: drawChoose});
 						j++
+            if(j==dvc.essential.graphic_data_array.length){pymChild = new pym.Child({ renderCallback: drawChoose});}
 						})
 					})
 			}
