@@ -252,7 +252,7 @@ input{
 		checkType();
 
 
-	
+
 
 		function drawChoose() {
 			d3.select("#occselect").remove();
@@ -1040,7 +1040,7 @@ input{
 				d3.select(".tabs").selectAll("li").attr("class","");
 				d3.select(this).attr("class","tab-current");
 				whichOne = d3.select(this).attr("id").slice(-1);
-				if(dvc.essential.keepurl=="true"){}else{removeHash();}
+				if(dvc.essential.keepurl==true){}else{removeHash();}
 				listnames = [];
 				drawChoose();
 

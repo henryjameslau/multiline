@@ -29,7 +29,7 @@
             "annotationCXCY":[
 
             ],
-			      "keepurl":"false",
+			      "keepurl":false,
             "yAxisLabel":"per 1000 live births",
             "yAxisLabel2":"",
             "yAxisScale":"auto_zero_max",
