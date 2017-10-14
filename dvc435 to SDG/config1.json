@@ -32,7 +32,7 @@
 			      "keepurl":"false",
             "yAxisLabel":"per 1000 live births",
             "yAxisLabel2":"",
-            "yAxisScale":"auto_min_max",
+            "yAxisScale":"auto_zero_max",
             "yAxisBreak": false,
             "yAxisBreak_sm_md_lg": [52, 52, 52]
     },

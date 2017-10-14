@@ -249,22 +249,16 @@ input{
 		var whichOne = 0;
     var dataarray={};
     var data={};
-
+    var colours=[];
 		checkType();
 
 
-		colours = ['#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854',"#666"];
+		//colours = ['#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854',"#666"];
 
 		function drawChoose() {
 			d3.select("#occselect").remove();
 			d3.select("#sel").remove();
 
-			// if(whichOne == 0){
-			// 	drawGraphic(graphic_data2);
-			// } else {
-			// 	drawGraphic(graphic_data);
-			// }
-    console.log("whichOne="+whichOne)
      drawGraphic(dataarray[whichOne])
 
 
@@ -274,6 +268,7 @@ input{
 		function drawGraphic(graphic_data) {
 		   var threshold_md = 788;
 		   var threshold_sm = dvc.optional.mobileBreakpoint;
+       colours=dvc.essential.lineColours;
 
 		  	//set variables for chart dimensions dependent on width of #graphic
 		    if (graphic.width() < threshold_sm) {
@@ -290,8 +285,8 @@ input{
 		            var height = Math.ceil((chart_width * dvc.optional.aspectRatio_lg[1]) / dvc.optional.aspectRatio_lg[0]) - margin.top - margin.bottom;
 			}
 
-		    // clear out existing graphics
-		    graphic.empty();
+		    // clear out existing graphics including fallback.png
+		  graphic.empty();
 			keypoints.empty();
 			footer.empty();
 
@@ -324,17 +319,16 @@ input{
 
 	        //specify number of ticks on x axis and whether 1st and last data point labels are included
 	        if(graphic.width()<threshold_sm){
-	            xAxis.tickValues(x.ticks(dvc.optional.x_num_ticks_sm_md_lg[0]).concat( x.domain() ));
+	              xAxis.tickValues(x.ticks(dvc.optional.x_num_ticks_sm_md_lg[0]).concat( x.domain() ));
 	        } else if (graphic.width() <= threshold_md){
-				xAxis.tickValues(x.ticks(dvc.optional.x_num_ticks_sm_md_lg[1])/*.concat( x.domain() )*/);
-			} else {
-	            xAxis.tickValues(x.ticks(dvc.optional.x_num_ticks_sm_md_lg[2])/*.concat( x.domain() )*/);
+				        xAxis.tickValues(x.ticks(dvc.optional.x_num_ticks_sm_md_lg[1])/*.concat( x.domain() )*/);
+			    } else {
+	              xAxis.tickValues(x.ticks(dvc.optional.x_num_ticks_sm_md_lg[2])/*.concat( x.domain() )*/);
 	        }
 
 		    var yAxis = d3.svg.axis()
 		        .scale(y)
 		        .orient('left');
-
 
 
 		    //gridlines
@@ -362,24 +356,6 @@ input{
 				         indexno.push("index" +j);
 
             lines["index"+j] = graphic_data.map(function(d) {
-
-		            return {
-		                'date': d.date,
-		                'amt': d[column]
-		            };
-		        });
-				j++;
-		    }
-
-        for (var column in dataarray[1][0]){
-
-		        if (column == 'date') continue;
-
-                 babynames.push(column);
-				 indexno.push("index" +j);
-
-		        //lines["index"+j] = graphic_data.map(function(d) {
-            lines["index"+j] = dataarray[1].map(function(d) {
 
 		            return {
 		                'date': d.date,
@@ -574,7 +550,7 @@ input{
 			            })
 						.style("pointer-events","none")
 						.on("mouseout",null)
-                        .on("mouseover",null);
+            .on("mouseover",null);
 
 
 
@@ -656,38 +632,6 @@ input{
 							});
 						});
 
-
-
- //       j=0;
-//		for (var column in graphic_data[0]) {
-//			if (column == 'date') continue;
-//
-//			svg.append("g")
-//				.selectAll("circle")
-//				.data(graphic_data)
-//				.enter()
-//				.append('circle')
-//                .attr("class", "circle" + column)
-//                .attr("cx", function(d,i){
-//					return x(d.date);
-//				})
-//				.attr("cy", function(d,i){
-//					if(isNaN(d[column])){
-//						return y(140);
-//					} else {
-//						return y(d[column]);
-//				    }
-//                })
-//				.attr("r", 2)
-//				.attr("stroke", "none")
-//				.attr("stroke-width","2px")
-//				.attr("fill","none");
-//
-//		 j++
-//		}
-
-
-
 			//create link to source
 			d3.select(".footer").append("p")
 				.text("Source: ")
@@ -711,10 +655,7 @@ input{
 
     function selectlist() {
 
-			//var areacodes =  datacsv.map(function(d) { return d.AREACD; });
-			//var areanames =  datacsv.map(function(d) { return d.AREANM; });
 			var menunames = d3.zip(babynames,indexno).sort(function(a, b){ return d3.ascending(a[0], b[0]); });
-
 
 			// Build option menu for occupations
 			var optns = d3.select("#chosensel").append("div").attr("id","sel").append("select")
@@ -729,21 +670,19 @@ input{
 				.text("");
 
 			optns.selectAll("p").data(menunames).enter().append("option")
-				.attr("value", function(d){ return d[1]}) //editthis
+				.attr("value", function(d){ return d[1]})
 				.text(function(d){ return d[0]});
 
 			myId=null;
-
-
 			removenames = [];
 			oldlistnames = [];
 
-			$('#occselect').chosen({width: "98%", max_selected_options: 6/*, allow_single_deselect:true*/}).on('change',function(evt,params){
+      // if you want to change the max number of choices this is where you do it with max_selected_options
+			$('#occselect').chosen({width: "98%", max_selected_options: 6}).on('change',function(evt,params){
 
 								if(typeof params != 'undefined') {
 
-										/* identify the data-nm attribute of the polygon you've hovered over */
-										//indexarea = document.getElementById("occselect").selectedIndex;
+
 										myId=params.selected;
 
 										myDeselect=params.deselected;
@@ -759,16 +698,6 @@ input{
 											listnames.pop();
 											//delete listnames[index];
 										}
-
-
-
-										//currclass=params.selected;
-
-                                        //d3.selectAll(".hoverline")
-//                                            .on("mouseover",null)
-//											.on("mouseout",null);
-
-
 
 										listnames.forEach(function(d,i){
 											if(myDeselect === undefined){
@@ -798,52 +727,9 @@ input{
 
 	};
 
-	function getCodes(myPC)	{
-
-		var myURIstring=encodeURI("https://api.postcodes.io/postcodes/"+myPC);
-		$.support.cors = true;
-		$.ajax({
-			type: "GET",
-			crossDomain: true,
-			dataType: "jsonp",
-			url: myURIstring,
-			error: function (xhr, ajaxOptions, thrownError) {
-					$("#areanm").text("couldn't process this request").show();
-				},
-			success: function(data1){
-					if(data1.status == 200 ){
-
-								area =data1.result.codes.ccg;
-								areaName = data1.result.ccg;
-
-								d3.selectAll('#selected').remove();
-
-
-								var currpath = d3.select("#graphic")
-										.select("#" + area)
-										.attr("d");
-
-								d3.select(".linegroup").append("path")
-										.attr("d",currpath)
-										.attr("id","selected")
-										.attr("class", "line")
-
-								/* Display name of area*/
-								d3.select("#areanm").text(areaName);
-								d3.select("#clearBtn").classed("hide", false);
-
-					} else {
-								d3.select("#areanm").text("Not a valid postcode");
-					}
-			}
-
-		});
-
-	}
-
     function stripspaces(str){
-	str=str.replace(/\s+/g, '');
-	return str;
+    	str=str.replace(/\s+/g, '');
+    	return str;
 	}
 
     function hoverLine(myId,no,method){
@@ -1176,7 +1062,6 @@ input{
 			listnamesAll = 	listnamesLocal;
 		} else if(listnamesParent != undefined) {
 			listnamesAll = 	listnamesParent;
-			console.log(listnamesAll);
 		} else {var listnamesAll}
 
 
@@ -1210,57 +1095,28 @@ input{
 		   //load config
 			d3.json("config1.json", function(error, config) {
 			dvc=config
-      console.log("loading config")
 			if(dvc.essential.graphic_data_array.length > 0){
 				dvc.essential.graphic_data_array.forEach(function(i)
 					{
 						j=0;
-						console.log("each csv:"+i)
 						d3.csv(i,function(error,data){
-						//console.log(data[j])
-						console.log("read the csv")
-						console.log("j="+j)
 						dataarray[j]=data
             dataarray[j].forEach(function(d) {
   					 	d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
   					 });
-						console.log(dataarray[j])
+             pymChild = new pym.Child({ renderCallback: drawChoose});
 						j++
 						})
-					}
+					})
+			}
+    })
 
-			)}
-
-				// //load chart data
-				// d3.csv(dvc.essential.graphic_data_url, function(error, data) {
-				// 	graphic_data = data;
-        //
-				// 	graphic_data.forEach(function(d) {
-				// 		d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
-				// 	});
-        //
-				// 	d3.csv(dvc.essential.graphic_data_url2, function(error, data2) {
-				// 		graphic_data2 = data2;
-        //
-				// 		graphic_data2.forEach(function(d) {
-				// 			d.date = d3.time.format(dvc.essential.dateFormat).parse(d.date);
-				// 		});
-        //
-				// 		//use pym to create iframed chart dependent on specified variables
-				// 		pymChild = new pym.Child({ renderCallback: drawChoose});
-        //
-				// 	});
-        pymChild = new pym.Child({ renderCallback: drawChoose});
-				})//;
-			//}//)
 
 		} else {
       console.log("fallback")
 			 //use pym to create iframe containing fallback image (which is set as default)
-			  pymChild = new pym.Child();
-			if (pymChild) {
-		        pymChild.sendHeight();
-		    }
+			pymChild = new pym.Child();
+			if (pymChild) {pymChild.sendHeight();}
 		}
 
 		var _gaq = _gaq || [];
