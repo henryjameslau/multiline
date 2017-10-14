@@ -2,8 +2,8 @@
     "essential" : {
             "graphic_data_url": "under5.csv",
             "graphic_data_url2": "neonatal.csv",
-			      "graphic_data_array":["under5.csv","neonatal.csv"],
-            "tabnames":["Under 5 mortality","Neonatal mortality"],
+			      "graphic_data_array":["under5.csv","neonatal.csv","under5.csv"],
+            "tab_names":["Under 5 mortality","Neonatal mortality","Another under 5 button"],
             "dateFormat":"%Y",
             "lineColours":["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#666"],
 

@@ -30,7 +30,6 @@
 			 stroke-width: 1px  !important;
 	}*/
 
-	#graphic #england { stroke: #7b3294 !important;   stroke-width: 2px  !important;}
 	#graphic .selected {/* stroke: #008837 !important; */  stroke-width: 2px  !important; fill:none;}
 
 		.border0 { border-top: 2px solid #7b3294; }
@@ -206,8 +205,7 @@ input{
 				<div class="tabs tabs-style-iconfall">
 					<nav>
 						<ul>
-							<li><a><span> Under-five mortality rate</span></a></li>
-							<li><a><span> Neonatal mortality</span></a></li>
+
 						</ul>
 					</nav>
 				</div><!-- /tabs -->
@@ -244,6 +242,7 @@ input{
 		var graphic = $('#graphic');
 		var keypoints = $('#keypoints');
 		var footer = $(".footer");
+    var tabs = $(".tabs");
 		var pymChild = null;
 		var listnames = [];
 		var whichOne = 0;
@@ -253,7 +252,7 @@ input{
 		checkType();
 
 
-		//colours = ['#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854',"#666"];
+	
 
 		function drawChoose() {
 			d3.select("#occselect").remove();
@@ -283,11 +282,18 @@ input{
 		            var height = Math.ceil((chart_width * dvc.optional.aspectRatio_lg[1]) / dvc.optional.aspectRatio_lg[0]) - margin.top - margin.bottom;
 			}
 
-		    // clear out existing graphics including fallback.png
-		  graphic.empty();
-			keypoints.empty();
-			footer.empty();
+		    // clear out existing graphics
+		    graphic.empty();
+			  keypoints.empty();
+			  footer.empty();
+        d3.select(".tabs").select("ul").selectAll("*").remove();
 
+
+      //change the text in the tabs to what's in the config
+      if(dvc.essential.tab_names.length>0){
+        dvc.essential.tab_names.forEach(function(d,i){
+        d3.select(".tabs").select("ul").append("li").attr("id","cat"+i).append("a").append('span').text(dvc.essential.tab_names[i])
+      })}
 
 		    x = d3.time.scale()
 		        .range([0, chart_width]);
@@ -641,7 +647,8 @@ input{
 			//Check if there are any preselects
 			checkUrl();
 
-
+      //check the tab buttons
+      checkType();
 			//use pym to calculate chart dimensions
 		    if (pymChild) {
 		        pymChild.sendHeight();
@@ -1005,12 +1012,9 @@ input{
 			//download image button
 			d3.select("#downloadshare").on("click",function(){saveSvgAsPng(document.getElementById("chart"), "fallback.png")});
 
-
-
 	}
 
 	function checkType() {
-
 		urlLocal = window.location.href;
 		urlParent = document.referrer;
 

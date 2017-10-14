@@ -6,7 +6,7 @@
   right:5px;
   display: inline-block;
   vertical-align: middle;
-  font-size: 15px;
+  font-size: 16px;
   zoom: 1;
   *display: inline;
   -webkit-user-select: none;
@@ -188,7 +188,6 @@
   padding: 0;
   width: 100%;
   height: auto !important;
-  height: 1%;
   border: 1px solid #aaa;
   background-color: #fff;
   /*background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(1%, #eeeeee), color-stop(15%, #ffffff));
@@ -231,7 +230,7 @@
   position: relative;
   margin: 3px 3px 3px 5px;
   padding: 3px 20px 3px 5px;
-  
+
   background-color: #EAEAEA;
  /* background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(20%, #f4f4f4), color-stop(50%, #f0f0f0), color-stop(52%, #e8e8e8), color-stop(100%, #eeeeee));
   background-image: -webkit-linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
