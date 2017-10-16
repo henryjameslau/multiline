@@ -1,34 +1,16 @@
 {
     "essential" : {
-            "graphic_data_url": "under5.csv",
-            "graphic_data_url2": "neonatal.csv",
 			      "graphic_data_array":["under5.csv","neonatal.csv"],
             "tab_names":["Under 5 mortality","Neonatal mortality"],
             "dateFormat":"%Y",
             "lineColours":["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#666"],
 
             "legendLabels" : [],
-
             "sourceText":["CHANGE ME"],
             "sourceURL":["https://www.ons.gov.uk/"],
 
-            "annotationChart": [
 
-            ],
-            "annotationBullet": [
 
-            ],
-            "annotationXY":[
-
-            ],
-            "annotationAlign":[
-
-            ],
-
-            "circles" : true,
-            "annotationCXCY":[
-
-            ],
 			      "keepurl":false,
             "yAxisLabel":"per 1000 live births",
             "yAxisLabel2":"",
