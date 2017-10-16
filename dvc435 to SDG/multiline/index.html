@@ -1095,7 +1095,7 @@ input{
 		//check whether browser can cope with svg
 		if (Modernizr.svg) {
 		   //load config
-			d3.json("config1.json", function(error, config) {
+			d3.json("config.json", function(error, config) {
 			dvc=config
 			if(dvc.essential.graphic_data_array.length > 0){
 				dvc.essential.graphic_data_array.forEach(function(i)
